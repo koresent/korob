@@ -1,0 +1,139 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & Release (Linux x86_64)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pkg-config \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libssl-dev \
+            libgtk-3-dev \
+            libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Check Svelte and TypeScript types
+        run: npm run check
+
+      - name: Build frontend and Tauri application
+        run: npm run tauri build
+
+      - name: Prepare release packages and checksums
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          DATE=$(date -u +'%Y-%m-%d')
+
+          mkdir -p dist/package
+          cp src-tauri/target/release/korob dist/package/
+          cp README.md dist/package/
+
+          tar -czvf korob-x86_64-unknown-linux-gnu.tar.gz -C dist/package .
+          sha256sum korob-x86_64-unknown-linux-gnu.tar.gz > korob-x86_64-unknown-linux-gnu.tar.gz.sha256
+
+          # Standalone binary
+          cp src-tauri/target/release/korob korob-linux-x86_64
+          sha256sum korob-linux-x86_64 > korob-linux-x86_64.sha256
+
+          # Bundles (deb, rpm, AppImage)
+          mkdir -p release-artifacts
+          cp korob-x86_64-unknown-linux-gnu.tar.gz release-artifacts/
+          cp korob-x86_64-unknown-linux-gnu.tar.gz.sha256 release-artifacts/
+          cp korob-linux-x86_64 release-artifacts/
+          cp korob-linux-x86_64.sha256 release-artifacts/
+
+          find src-tauri/target/release/bundle/ -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" \) -exec cp {} release-artifacts/ \;
+
+          cd release-artifacts
+          for f in *; do
+            if [[ "$f" != *.sha256 ]]; then
+              sha256sum "$f" > "${f}.sha256"
+            fi
+          done
+
+      - name: Determine release metadata
+        id: meta
+        if: github.event_name != 'pull_request'
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          DATE=$(date -u +'%Y-%m-%d')
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            TAG_NAME="${{ github.ref_name }}"
+            echo "tag_name=${TAG_NAME}" >> "$GITHUB_OUTPUT"
+            echo "release_name=Release ${TAG_NAME}" >> "$GITHUB_OUTPUT"
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            echo "make_latest=true" >> "$GITHUB_OUTPUT"
+            echo "body=Release ${TAG_NAME} (${SHORT_SHA})" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag_name=nightly" >> "$GITHUB_OUTPUT"
+            echo "release_name=Nightly (${SHORT_SHA})" >> "$GITHUB_OUTPUT"
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "make_latest=false" >> "$GITHUB_OUTPUT"
+            echo "body=Continuous rolling build from commit ${{ github.sha }} on branch main (${DATE})." >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update nightly git tag
+        if: github.event_name != 'pull_request' && !startsWith(github.ref, 'refs/tags/')
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f nightly HEAD
+          git push -f origin nightly
+
+      - name: Publish GitHub Release
+        if: github.event_name != 'pull_request'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag_name }}
+          name: ${{ steps.meta.outputs.release_name }}
+          body: ${{ steps.meta.outputs.body }}
+          prerelease: ${{ steps.meta.outputs.prerelease == 'true' }}
+          make_latest: ${{ steps.meta.outputs.make_latest }}
+          files: |
+            release-artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

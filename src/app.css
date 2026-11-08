@@ -1,0 +1,247 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --app-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --app-font-size: 13px;
+  /* Default: Gruvbox Dark */
+  --bg-base: #1d2021;
+  --bg-sidebar: #282828;
+  --bg-card: #32302f;
+  --bg-card-hover: #3c3836;
+  --bg-card-active: #504945;
+  --border-subtle: #3c3836;
+  --border-strong: #504945;
+  --text-primary: #ebdbb2;
+  --text-secondary: #d5c4a1;
+  --text-muted: #a89984;
+  --accent: #b8bb26;
+  --accent-hover: #98971a;
+  --accent-text: #282828;
+  --badge-bg: #3c3836;
+  --badge-text: #b8bb26;
+  --kbd-bg: #282828;
+  --kbd-border: #504945;
+  --kbd-text: #ebdbb2;
+}
+
+[data-theme="gruvbox-dark"] {
+  --bg-base: #1d2021;
+  --bg-sidebar: #282828;
+  --bg-card: #32302f;
+  --bg-card-hover: #3c3836;
+  --bg-card-active: #504945;
+  --border-subtle: #3c3836;
+  --border-strong: #504945;
+  --text-primary: #ebdbb2;
+  --text-secondary: #d5c4a1;
+  --text-muted: #a89984;
+  --accent: #b8bb26;
+  --accent-hover: #98971a;
+  --accent-text: #282828;
+  --badge-bg: #3c3836;
+  --badge-text: #b8bb26;
+  --kbd-bg: #282828;
+  --kbd-border: #504945;
+  --kbd-text: #ebdbb2;
+}
+
+[data-theme="gruvbox-light"] {
+  --bg-base: #f9f5d7;
+  --bg-sidebar: #f2e5bc;
+  --bg-card: #ebdbb2;
+  --bg-card-hover: #e0d0a8;
+  --bg-card-active: #d5c4a1;
+  --border-subtle: #d5c4a1;
+  --border-strong: #bdae93;
+  --text-primary: #282828;
+  --text-secondary: #3c3836;
+  --text-muted: #7c6f64;
+  --accent: #af3a03;
+  --accent-hover: #9d0006;
+  --accent-text: #fbf1c7;
+  --badge-bg: #d5c4a1;
+  --badge-text: #b57614;
+  --kbd-bg: #f2e5bc;
+  --kbd-border: #bdae93;
+  --kbd-text: #282828;
+}
+
+[data-theme="monokai"] {
+  --bg-base: #1e1f1c;
+  --bg-sidebar: #272822;
+  --bg-card: #34352f;
+  --bg-card-hover: #3e3d32;
+  --bg-card-active: #49483e;
+  --border-subtle: #3e3d32;
+  --border-strong: #49483e;
+  --text-primary: #f8f8f2;
+  --text-secondary: #cfcfc2;
+  --text-muted: #75715e;
+  --accent: #a6e22e;
+  --accent-hover: #b6f23e;
+  --accent-text: #1e1f1c;
+  --badge-bg: #3e3d32;
+  --badge-text: #fd971f;
+  --kbd-bg: #272822;
+  --kbd-border: #49483e;
+  --kbd-text: #f8f8f2;
+}
+
+[data-theme="catppuccin-mocha"] {
+  --bg-base: #181825;
+  --bg-sidebar: #1e1e2e;
+  --bg-card: #25263a;
+  --bg-card-hover: #313244;
+  --bg-card-active: #45475a;
+  --border-subtle: #313244;
+  --border-strong: #45475a;
+  --text-primary: #cdd6f4;
+  --text-secondary: #bac2de;
+  --text-muted: #a6adc8;
+  --accent: #cba6f7;
+  --accent-hover: #b4befe;
+  --accent-text: #11111b;
+  --badge-bg: #313244;
+  --badge-text: #f9e2af;
+  --kbd-bg: #1e1e2e;
+  --kbd-border: #45475a;
+  --kbd-text: #cdd6f4;
+}
+
+[data-theme="catppuccin-latte"] {
+  --bg-base: #e6e9ef;
+  --bg-sidebar: #eff1f5;
+  --bg-card: #dce0e8;
+  --bg-card-hover: #ccd0da;
+  --bg-card-active: #bcc0cc;
+  --border-subtle: #ccd0da;
+  --border-strong: #bcc0cc;
+  --text-primary: #4c4f69;
+  --text-secondary: #5c5f77;
+  --text-muted: #6c6f85;
+  --accent: #8839ef;
+  --accent-hover: #7287fd;
+  --accent-text: #eff1f5;
+  --badge-bg: #ccd0da;
+  --badge-text: #df8e1d;
+  --kbd-bg: #eff1f5;
+  --kbd-border: #bcc0cc;
+  --kbd-text: #4c4f69;
+}
+
+[data-theme="dracula"] {
+  --bg-base: #21222c;
+  --bg-sidebar: #282a36;
+  --bg-card: #343746;
+  --bg-card-hover: #44475a;
+  --bg-card-active: #6272a4;
+  --border-subtle: #383a59;
+  --border-strong: #6272a4;
+  --text-primary: #f8f8f2;
+  --text-secondary: #e2e2dc;
+  --text-muted: #6272a4;
+  --accent: #bd93f9;
+  --accent-hover: #ff79c6;
+  --accent-text: #282a36;
+  --badge-bg: #44475a;
+  --badge-text: #50fa7b;
+  --kbd-bg: #282a36;
+  --kbd-border: #6272a4;
+  --kbd-text: #f8f8f2;
+}
+
+[data-theme="solarized-dark"] {
+  --bg-base: #00212b;
+  --bg-sidebar: #002b36;
+  --bg-card: #073642;
+  --bg-card-hover: #0c4352;
+  --bg-card-active: #145365;
+  --border-subtle: #093c4a;
+  --border-strong: #174d5b;
+  --text-primary: #93a1a1;
+  --text-secondary: #839496;
+  --text-muted: #657b83;
+  --accent: #2aa198;
+  --accent-hover: #268bd2;
+  --accent-text: #002b36;
+  --badge-bg: #073642;
+  --badge-text: #b58900;
+  --kbd-bg: #002b36;
+  --kbd-border: #174d5b;
+  --kbd-text: #93a1a1;
+}
+
+[data-theme="solarized-light"] {
+  --bg-base: #f7f0dc;
+  --bg-sidebar: #fdf6e3;
+  --bg-card: #eee8d5;
+  --bg-card-hover: #e4ddc8;
+  --bg-card-active: #d9d2bd;
+  --border-subtle: #e0d9c4;
+  --border-strong: #cbbf9f;
+  --text-primary: #586e75;
+  --text-secondary: #657b83;
+  --text-muted: #93a1a1;
+  --accent: #268bd2;
+  --accent-hover: #2aa198;
+  --accent-text: #fdf6e3;
+  --badge-bg: #eee8d5;
+  --badge-text: #b58900;
+  --kbd-bg: #fdf6e3;
+  --kbd-border: #cbbf9f;
+  --kbd-text: #586e75;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+body {
+  font-family: var(--app-font-family);
+  font-size: var(--app-font-size);
+}
+
+/* Base button and input resets */
+button, a, input, select, textarea {
+  font-family: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Key combination badge */
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  height: 1.5rem;
+  padding: 0 0.4rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--kbd-text);
+  background-color: var(--kbd-bg);
+  border: 1px solid var(--kbd-border);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  user-select: none;
+}

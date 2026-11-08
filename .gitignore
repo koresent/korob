@@ -1,0 +1,49 @@
+# Node & Frontend dependencies and builds
+node_modules/
+.svelte-kit/
+build/
+dist/
+.vite/
+.turbo/
+.cache/
+
+# Rust & Tauri builds
+target/
+src-tauri/target/
+debug/
+**/*.rs.bk
+*.pdb
+rustc-ice-*.txt
+**/mutants.out*/
+src-tauri/WixTools/
+
+# Release & packaging artifacts
+release-artifacts/
+dist/
+*.tar.gz
+*.tar.gz.sha256
+*.sha256
+korob-linux-x86_64
+
+# Logs and environment
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.env
+.env.*
+!.env.example
+
+# Temporary and editor files
+*.tmp
+*.swp
+*~
+core.*
+.DS_Store
+Thumbs.db
+
+# Editor configurations
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
